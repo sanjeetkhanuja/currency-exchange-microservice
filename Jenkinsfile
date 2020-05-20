@@ -25,6 +25,7 @@ pipeline {
 				bat "mvn clean compile"
 			}	
 		}
+		/*
 		stage('Test') {
 			steps {
 				echo "Test"
@@ -37,6 +38,7 @@ pipeline {
 				bat "mvn failsafe:integration-test failsafe:verify"
 			}	
 		}
+		*/
 		stage('Package') {
 			steps {
 				echo "Package"
