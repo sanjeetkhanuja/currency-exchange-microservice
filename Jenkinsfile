@@ -1,12 +1,6 @@
 pipeline {
 	agent any 
 	
-	//{ 
-	//	docker { 
-	//		image 'maven:3.6.3' 
-	//	} 
-	//}
-	
 	environment {
 		dockerHome = tool 'myDocker'
 		mavenHome = tool 'mymvn'
@@ -16,8 +10,8 @@ pipeline {
 		stage('Checkout') {
 			steps {
 				echo "Checkout"
-				sh 'mvn --version'
-				sh 'docker --version'
+				bat 'mvn --version'
+				bat 'docker --version'
 				echo "Path : $PATH"
 				echo "Build Number: $env.BUILD_NUMBER"
 				echo "Job Name: $env.JOB_NAME"
@@ -28,30 +22,31 @@ pipeline {
 		stage('Compile') {
 			steps {
 				echo "Compile"
-				sh "mvn clean compile"
+				bat "mvn clean compile"
 			}	
 		}
 		stage('Test') {
 			steps {
 				echo "Test"
-				sh "mvn test"
+				bat "mvn test"
 			}	
 		}
 		stage('Integration Test') {
 			steps {
 				echo "Test"
-				sh "mvn failsafe:integration-test failsafe:verify"
+				bat "mvn failsafe:integration-test failsafe:verify"
 			}	
 		}
 		stage('Package') {
 			steps {
 				echo "Package"
-				sh "mvn package -DskipTests"
+				bat "mvn package -DskipTests"
 			}	
 		}
 		stage('Build Docker image') {
 			steps {
 				script {
+					echo "Build Docker image"
 					dockerImage = docker.build ("sanjeetkhanuja/currency-exchange-devops:${env.BUILD_TAG}")
 				}
 			}
